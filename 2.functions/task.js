@@ -35,7 +35,7 @@ function makeWork(arrOfArr, func) {
       value = func(arrOfArr[i]);
     }
   }
-  
+  max = value;
   return max;
 }
 
