@@ -44,9 +44,14 @@ function getTriangle(firstSide, secondSide, thirdSide) {
     try{
         return new Triangle(firstSide, secondSide, thirdSide);
     }catch(error){
-        
-        return [getArea(), getPerimeter()];
-                
+        try{        
+            return {
+            getArea: getArea(),
+            getPerimeter: getPerimeter()
+            }
+        }catch(err){
+            return String("Ошибка! Треугольник не существует");
+        }
     }
-    }
+}
 
