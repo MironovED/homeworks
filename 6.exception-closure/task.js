@@ -46,12 +46,14 @@ function getTriangle(firstSide, secondSide, thirdSide) {
     }catch(error){
         try{        
             return {
-            getArea: getArea(),
-            getPerimeter: getPerimeter()
-            }
+            getArea: this.getArea(),
+            getPerimeter: this.getPerimeter(),
+            };
         }catch(err){
             return String("Ошибка! Треугольник не существует");
         }
     }
 }
+
+
 
