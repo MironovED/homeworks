@@ -1,7 +1,7 @@
 //Задание №1
 
-class PrintEditionItem{
-    constructor(name, releaseDate, pagesCount){
+class PrintEditionItem {
+    constructor(name, releaseDate, pagesCount) {
         this.name = name;
         this.releaseDate = releaseDate;
         this.pagesCount = pagesCount;
@@ -9,38 +9,36 @@ class PrintEditionItem{
         this.type = null;
     }
 
-    fix(){
-        if((this.state *= 1.5) >= 100){
-        this.state = 100;
-        } 
+    fix() {
+        this.state *= 1.5;
     }
 
-    set state(value){
-        if(value < 0){
-        this._state = 0;
+    set state(value) {
+        if (value < 0) {
+            this._state = 0;
         }
-        if(value >= 100){
-        this._state = 100;
+        if (value >= 100) {
+            this._state = 100;
         }
-        if(0 < value < 100){
-        this._state = value;
+        if (value >= 0 && value < 100) {
+            this._state = value;
         }
     }
 
-    get state(){
+    get state() {
         return this._state;
     }
 
 }
 
-class Magazine extends PrintEditionItem{
-    constructor(name, releaseDate, pagesCount){
+class Magazine extends PrintEditionItem {
+    constructor(name, releaseDate, pagesCount) {
         super(name, releaseDate, pagesCount);
         this.type = "magazine";
     }
 }
 
-class Book extends PrintEditionItem{
+class Book extends PrintEditionItem {
     constructor(author, name, releaseDate, pagesCount){
         super(name, releaseDate, pagesCount);
         this.type = "book";
@@ -48,21 +46,21 @@ class Book extends PrintEditionItem{
     }
 }
 
-class NovelBook extends Book{
-    constructor(author, name, releaseDate, pagesCount){
+class NovelBook extends Book {
+    constructor(author, name, releaseDate, pagesCount) {
         super(author, name, releaseDate, pagesCount);
         this.type = "novel";
     }
 }
 
 class FantasticBook extends Book {
-    constructor(author, name, releaseDate, pagesCount){
+    constructor(author, name, releaseDate, pagesCount) {
         super(author, name, releaseDate, pagesCount);
         this.type = "fantastic";
     }
 }
 
-class DetectiveBook extends Book{
+class DetectiveBook extends Book {
     constructor(author, name, releaseDate, pagesCount){
         super(author, name, releaseDate, pagesCount);
         this.type = "detective";
@@ -72,93 +70,102 @@ class DetectiveBook extends Book{
 //Задание №2
 
 class Library {
-    constructor(name){
+    constructor(name) {
         this.name = name;
         this.books = [];
     }
 
-    addBook(book){
-        if(book.state > 30){
+    addBook(book) {
+        if (book.state > 30) {
             this.books.push(book);
         }
     }
 
-    findBookBy(type, value){
+    findBookBy(type, value) {
         const book = this.books.find(item => item[type] === value);
         return book || null;
     }
 
-    giveBookByName(bookName){
+    giveBookByName(bookName) {
         const book = this.books.find(item => item['name'] === bookName);
-        this.books.splice(this.books.indexOf(book), 1);
+        if (this.books.indexOf(book) !== -1) {
+            this.books.splice(this.books.indexOf(book), 1);
+        }
         return book || null;
     }
-
 }
 
 //Задание №3
 
 class Student {
-    constructor(name, gender, age){
-    this.name = name;
-    this.gender = gender;
-    this.age = age;
+    constructor(name, gender, age) {
+        this.name = name;
+        this.gender = gender;
+        this.age = age;
     }
 
 
-    checkMark(mark){
-        if(mark > 0 && mark < 6){
-            return mark;
-        }
+    checkMark(mark) {
+        return mark > 0 && mark < 6;  
     }
     
     
-    addMarkSubjectName(mark, subjectName) {
-        if(this.checkMark(mark) === undefined){
+    addMark(mark, subjectName) {
+        if (this.checkMark(mark) === false) {
             return console.log("Ошибка, оценка должна быть числом от 1 до 5");
         }
-        if(this.marks === undefined){
-          let marks = [];
-          marks[0] = {[subjectName]:[mark]};
-          this.marks = marks;
-          } else {
-              let arr = this.marks;
-              for(let element of arr){
-                if(subjectName in element){
+        if (this.marks === undefined) {
+            let marks = [];
+            marks[0] = {[subjectName]:[mark]};
+            this.marks = marks;
+        } else {
+            let arr = this.marks;
+            for (let element of arr) {
+                if (subjectName in element) {
                     let arrMarks = element[subjectName];
                     arrMarks.push(mark);
-                    break;
-
-                }else{
-                    arr.push({[subjectName]:[mark]});
-                    break;
+                    return;
                 }
             }
-            
-          }
+            arr.push({[subjectName]:[mark]});
         }
-        
-    //  addMarks(...mark) {
-    //     if(this.marks === undefined){
-    //       let marks = [];
-    //       marks.push(...mark);
-    //       this.marks = marks;
-    //       } else {
-    //         let arr = this.marks;
-    //         arr.push(...mark);
-    //       }
-    //   }
-      
+    }
+
     getAverage () {
-        let items = this.marks;
+        let marks = [];
+        for (let element of this.marks) {
+            Object.values(element).forEach((value) =>  marks.push(...value));
+        }
         let average;
-        items.reduce((acc, item, index, items)=> {
-          acc += item;
-          if(index === items.length - 1){
-            average = acc/items.length;
-            return average;
-          }
-          return acc;
+        marks.reduce((acc, mark, index, marks) => {
+            acc += mark;
+            if (index === marks.length - 1) {
+                average = acc/marks.length;
+                return average;
+            }
+            return acc;
+        }, 0)
+        return average;
+    }
+    
+    getAverageBySubject(subjectName) {   
+        let arr = this.marks;
+        let subjectMarks = [];
+        for (let element of arr) {
+            if (subjectName in element) {
+                subjectMarks.push(...element[subjectName]);
+            } else {
+                console.log("Несуществующий предмет");
+            }
+        }
+        let average;
+        subjectMarks.reduce((acc, subjectMark, index, subjectMarks) => {
+            acc += subjectMark;
+            if (index === subjectMarks.length - 1) {
+                average = acc/subjectMarks.length;
+                return average;
+            }
+            return acc;
         }, 0)
         return average;
     }
@@ -168,16 +175,19 @@ class Student {
         delete this.marks;
         delete this.subject;
     }
-    
-    
 }
     
 
-      stud = new Student("Антон", "мужской", 20);
-      stud.addMarkSubjectName(4, "algebra");
-      stud.addMarkSubjectName(5, "geometry");
-      stud.addMarkSubjectName(3, "algebra");
-      stud.addMarkSubjectName(2, "geometry");
+const student = new Student("Олег Никифоров");
+student.addMark(5, "algebra");
+student.addMark(5, "algebra");
+student.addMark(5, "geometry");
+student.addMark(4, "geometry");
+student.addMark(6, "geometry"); // "Ошибка, оценка должна быть числом от 1 до 5"
+student.getAverageBySubject("geometry"); // Средний балл по предмету geometry 4.5
+student.getAverageBySubject("biology"); // Несуществующий предмет
+student.getAverage(); // Средний балл по всем предметам 4.75
+student.exclude("Исключен за попытку подделать оценки");    
 
 
 
