@@ -36,24 +36,19 @@ class Triangle {
     const halfPerimetr = 0.5 * (this.firstSide + this.secondSide + this.thirdSide);
     return Number(Math.sqrt(halfPerimetr * (halfPerimetr - this.firstSide) * (halfPerimetr - this.secondSide) * (halfPerimetr - this.thirdSide)).toFixed(3));
     }
-
-    
 }
 
 function getTriangle(firstSide, secondSide, thirdSide) {
     try{
         return new Triangle(firstSide, secondSide, thirdSide);
     }catch(error){
-        try{        
-            return {
-            getArea: this.getArea(),
-            getPerimeter: this.getPerimeter(),
-            };
-        }catch(err){
-            return String("Ошибка! Треугольник не существует");
+        return {
+            getArea() {
+                return "Ошибка! Треугольник не существует"
+            },
+            getPerimeter() {      
+                return "Ошибка! Треугольник не существует"
+            }
         }
-    }
+    }   
 }
-
-
-
