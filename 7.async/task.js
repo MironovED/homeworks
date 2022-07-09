@@ -1,7 +1,7 @@
 class AlarmClock {
     constructor() {
         this.alarmCollection = [];
-        this.timerId;  
+        this.timerId = null;  
     }
 
     addClock(time, callback, id) {
@@ -20,13 +20,14 @@ class AlarmClock {
         const newArr = currentArr.filter(element => element['id'] !== id);
         if (currentArr.length !== newArr.length) {
             this.alarmCollection = newArr;
-            return true || false; //вернуть логическое значение об успешности или провала удаления
+            return true;
         }
+        return false;
     }
 
     getCurrentFormattedTime () {
-        const currentTime = (new Date().getHours + ":" + new Date().getMinutes);
-        return currentTime; //возвращает текущее время в строковом формате HH:MM
+        const currentTime = (new Date().getHours() + ":" + new Date().getMinutes());
+        return currentTime;
     }
 
     start() {
@@ -35,32 +36,52 @@ class AlarmClock {
                 callback();
             }
         }
-        if (this.timerId === undefined) {
+        if (this.timerId === null) {
                 const newInterval = setInterval(this.alarmCollection.forEach(() => checkClock), 2000);
                 this.timerId = newInterval;
         }
     }
 
     stop() {
-        if (this.timerId !== undefined) {
+        if (this.timerId !== null) {
             clearInterval(this.timerId);
-            this.timerId = undefined;
+            this.timerId = null;
         }
     }
 
     printAlarms() {
-        this.alarmCollection.forEach((element) => console.log(element.id + "," + element.time));
+        this.alarmCollection.forEach((element) => console.log(`Будильник №${element.id}: ${element.time}`));
     }
 
     clearAlarms() {
         this.stop;
-        // this.alarmCollection = [];
         this.alarmCollection.splice(0, this.alarmCollection.length);
     }
 }
 
 function testCase() {
     let phoneAlarm = new AlarmClock();
+    phoneAlarm.addClock(phoneAlarm.getCurrentFormattedTime(), () => {phoneAlarm.printAlarms()}, 1);
 
+    const plusOneMinutes = (new Date().getHours() + ":" + (new Date().getMinutes() + 1));
+    const plusFiveMinutes = (new Date().getHours() + ":" + (new Date().getMinutes() + 5));
+
+    phoneAlarm.addClock(plusOneMinutes, () => {
+        phoneAlarm.printAlarms();
+        phoneAlarm.removeClock(2);
+    }, 2);
+
+    phoneAlarm.addClock(plusFiveMinutes, () => {
+        phoneAlarm.printAlarms();
+        phoneAlarm.stop();
+        phoneAlarm.clearAlarms();
+        phoneAlarm.printAlarms();
+    }, 3);
+    
+    phoneAlarm.printAlarms();
+    
+    phoneAlarm.start();
 }
+
+
 
