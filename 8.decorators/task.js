@@ -20,35 +20,32 @@ function cachingDecoratorNew(func) {
   return wrapper;
 }
 
-function debounceDecoratorNew(func, delay) {
-  let isThrottled = false;
-  return function() {
-    if (isThrottled) {
-      return;
-    } 
 
-  const result = func();
-  isThrottled = true;
-  setTimeout(() => isThrottled = false, delay);
-  return result;
+
+function debounceDecoratorNew(func, delay) {
+    let timeout;
+    function wrapper(...args) {  
+      if (!timeout) {
+        func.apply(...args);
+      }
+
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(...args), delay);
+    }
+    return wrapper;
   }
-}
 
 function debounceDecorator2(func, delay) {
-  let isThrottled = false;
-  function wrapper() {
-    if (isThrottled) {
-      return;
-    } 
-    
-    const result = func();
-    isThrottled = true;
-    setTimeout(() => isThrottled = false, delay);
-    wrapper.count ++;
-    return result;
-  }
   wrapper.count = 0;
+  let timeout;
+  function wrapper(...args) {
+    if (!timeout) {
+      func.apply(...args);
+    }
+
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(...args), delay);
+    wrapper.count ++;
+  }
   return wrapper;
 }
-
-
