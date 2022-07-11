@@ -26,18 +26,22 @@ class AlarmClock {
     }
 
     getCurrentFormattedTime () {
-        const currentTime = (new Date().getHours() + ":" + new Date().getMinutes());
+        const options = {
+            hour: "2-digit",
+            minute: "2-digit",
+        }
+        const currentTime = new Date().toLocaleTimeString("ru", options);
         return currentTime;
     }
 
     start() {
         function checkClock(alarm) {
-            if (alarm === getCurrentFormattedTime) {
-                callback();
+            if (alarm.time === this.getCurrentFormattedTime) {
+                alarm.callback();
             }
         }
         if (this.timerId === null) {
-                const newInterval = setInterval(this.alarmCollection.forEach(() => checkClock), 2000);
+                const newInterval = setInterval(this.alarmCollection.forEach(checkClock, this), 2000);
                 this.timerId = newInterval;
         }
     }
@@ -61,10 +65,16 @@ class AlarmClock {
 
 function testCase() {
     let phoneAlarm = new AlarmClock();
-    phoneAlarm.addClock(phoneAlarm.getCurrentFormattedTime(), () => {phoneAlarm.printAlarms()}, 1);
+    phoneAlarm.addClock(phoneAlarm.getCurrentFormattedTime(), () => {
+        phoneAlarm.printAlarms()
+    }, 1);
 
-    const plusOneMinutes = (new Date().getHours() + ":" + (new Date().getMinutes() + 1));
-    const plusFiveMinutes = (new Date().getHours() + ":" + (new Date().getMinutes() + 5));
+    const options = {
+        hour: "2-digit",
+        minute: "2-digit",
+    }
+    const plusOneMinutes = new Date(Date.now() + (1 * 60 * 1000)).toLocaleTimeString("ru", options);
+    const plusFiveMinutes = new Date(Date.now() + (5 * 60 * 1000)).toLocaleTimeString("ru", options);
 
     phoneAlarm.addClock(plusOneMinutes, () => {
         phoneAlarm.printAlarms();
