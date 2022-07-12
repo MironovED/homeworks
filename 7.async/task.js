@@ -36,12 +36,12 @@ class AlarmClock {
 
     start() {
         function checkClock(alarm) {
-            if (alarm.time === this.getCurrentFormattedTime) {
+            if (alarm.time === this.getCurrentFormattedTime()) {
                 alarm.callback();
             }
         }
         if (this.timerId === null) {
-                const newInterval = setInterval(this.alarmCollection.forEach(checkClock, this), 2000);
+                const newInterval = setInterval(() => this.alarmCollection.forEach(checkClock, this), 2000);
                 this.timerId = newInterval;
         }
     }
@@ -58,7 +58,7 @@ class AlarmClock {
     }
 
     clearAlarms() {
-        this.stop;
+        this.stop();
         this.alarmCollection.splice(0, this.alarmCollection.length);
     }
 }
